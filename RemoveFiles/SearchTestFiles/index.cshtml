@@ -1,0 +1,240 @@
+﻿@{
+    ViewBag.Title = "iFirm | My Timesheet";
+    Layout = "~/Views/_Layout.cshtml";
+}
+
+@section style{
+    <link rel="stylesheet" href="/fe/mobile/css/timesheetdetails.css">
+}
+<!-- Pages -->
+<div class="pages navbar-through toolbar-through">
+    <!-- Page 1 -->
+    <div data-page="index" id="index" class="page" ng-controller="IndexPageController">
+        <input type="hidden" ng-bind="disableSitetimezoneTimesheetTimers" ng-init="disableSitetimezoneTimesheetTimers=@ViewBag.DisableSitetimezoneTimesheetTimers" />
+        <input type="hidden" ng-bind="isMobiletimeSheetsEnabled" ng-init="isMobiletimeSheetsEnabled=@ViewBag.IsMobiletimeSheetsEnabled" />
+        <input type="hidden" ng-bind="hdnTimesheetId" ng-init="hdnTimesheetId=@ViewBag.TimesheetId" />
+        <input type="hidden" ng-bind="hdnDate" ng-init="hdnDate='@ViewBag.Date'" />
+        <!-- Page content-->
+        <div class="page-content">
+            <div class="content-block">
+                <!-- Buttons row as tabs controller -->
+                <div class="buttons-row">
+                    <!-- Link to 1st tab, active -->
+                    <a href="#tab1" class="tab-link active billable button">Billable</a>
+                    <!-- Link to 2nd tab -->
+                    <a href="#tab2" class="tab-link nonbillable button">Non-billable</a>
+
+                </div>
+            </div>
+            <!-- Tabs, tabs wrapper -->
+            <div class="tabs ng-cloak" style="display:none">
+                <!-- Billable 1, active by default -->
+                <div id="tab1" class="tab active">
+                    <div class="content-block">
+                        <!--  <p>Billable screen</p>-->
+                        <div class="list-block">
+                            <ul>
+                                <li>
+                                    <div class="item-content">
+                                        <div class="item-media"></div>
+                                        <div class="item-inner">
+                                            <div class="item-title label">Date</div>
+                                            <div class="item-input">
+                                                <b>{{currentDate}}</b>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </li>
+                                <!-- Smart select item -->
+                                <li>
+
+                                    <!-- Additional "smart-select" class -->
+                                    <a href="#" class="item-link smart-select bjobid" data-searchbar="true" data-searchbar-placeholder="Search jobs">
+
+                                        <!-- select -->
+                                        <select name="jobs" id="jobs">
+                                            <option value="0">Select</option>
+                                            <option ng-repeat="option in JobLookup" value="{{option.id}}">{{option.job}}</option>
+                                        </select>
+                                        <div class="item-content">
+                                            <div class="item-inner">
+                                                <!-- Select label -->
+                                                <div class="item-title">Select Job</div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <div class="item-content">
+                                        <div class="item-media"><i class="icon icon-form-calendar"></i></div>
+                                        <div class="item-inner">
+                                            <div class="item-title label">Start Time</div>
+                                            <div class="item-input">
+                                                <input type="text" ng-attr-placeholder="Start Time" id="starttime" ng-model="starttime" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div id="starttime-container"></div>
+
+
+                                </li>
+                                <li>
+                                    <div class="item-content">
+                                        <div class="item-media"><i class="icon icon-form-calendar"></i></div>
+                                        <div class="item-inner">
+                                            <div class="item-title label">End Time</div>
+                                            <div class="item-input">
+                                                <input type="text" ng-attr-placeholder="Date Time" id="endtime" ng-model="endtime" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="endtime-container"></div>
+                                </li>
+
+                                <!-- Smart select item -->
+                                <li>
+
+                                    <!-- Additional "smart-select" class -->
+                                    <a href="#" class="item-link smart-select bactivityCode" data-searchbar="true" data-searchbar-placeholder="Search Activity Code">
+                                        <!-- select -->
+                                        <select id="activityCode">
+                                            <option value="0" selected>Select</option>
+                                            <option ng-repeat="option in BillableActivitylookup" value="{{option.id}}">{{option.code}}</option>
+                                        </select>
+                                        <div class="item-content">
+                                            <div class="item-inner">
+                                                <!-- Select label -->
+                                                <div class="item-title">Activity Code</div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="align-top">
+                                    <div class="item-content">
+                                        <div class="item-media"><i class="icon icon-form-comment"></i></div>
+                                        <div class="item-inner">
+                                            <div class="item-title label">Comment</div>
+                                            <div class="item-input">
+                                                <textarea ng-attr-placeholder="Add comments" ng-model="comment"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- Non Billable Tab 2 -->
+                <div id="tab2" class="tab">
+                    <div class="content-block">
+                        <div class="list-block">
+                            <ul>
+                                <li>
+                                    <div class="item-content">
+                                        <div class="item-media"></div>
+                                        <div class="item-inner">
+                                            <div class="item-title label">Date</div>
+                                            <div class="item-input">
+                                                <b>{{currentDate}}</b>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </li>
+                                <li>
+                                    <div class="item-content">
+                                        <div class="item-media"><i class="icon icon-form-calendar"></i></div>
+                                        <div class="item-inner">
+                                            <div class="item-title label">Start Time</div>
+                                            <div class="item-input">
+                                                <input type="text" ng-attr-placeholder="Start Time" id="nbstarttime" ng-model="nbstarttime">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="nbstarttime-container"></div>
+
+                                </li>
+                                <li>
+                                    <div class="item-content">
+                                        <div class="item-media"><i class="icon icon-form-calendar"></i></div>
+                                        <div class="item-inner">
+                                            <div class="item-title label">End Time</div>
+                                            <div class="item-input">
+                                                <input type="text" ng-attr-placeholder="End Time" id="nbendtime" ng-model="nbendtime">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div id="nbendtime-container"></div>
+                                </li>
+
+                                <!-- Smart select item -->
+                                <li>
+
+                                    <!-- Additional "smart-select" class -->
+                                    <a href="#" class="item-link smart-select nbactivityCodeSelector" data-searchbar="true" data-searchbar-placeholder="Search Activity Code">
+                                        <!-- select -->
+                                        <select id="nbActivityCode">
+                                            <option value="0" selected>Select</option>
+                                            <option ng-repeat="option in NonBillableActivitylookup" value="{{option.id}}">{{option.code}}</option>
+                                        </select>
+                                        <div class="item-content">
+                                            <div class="item-inner">
+                                                <!-- Select label -->
+                                                <div class="item-title">Activity Code</div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="align-top">
+                                    <div class="item-content">
+                                        <div class="item-media"><i class="icon icon-form-comment"></i></div>
+                                        <div class="item-inner">
+                                            <div class="item-title label">Comment</div>
+                                            <div class="item-input">
+                                                <textarea ng-attr-placeholder="Add comments" ng-model="nbcomment"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p ng-show="addTime" class="addTimeBtn">
+                <a href="#" ng-click="AddTime();" class="button button-round active" style="width:100px;">
+                    Add Time
+                </a>
+            </p>
+            <div ng-show="editTime" class="panelButtons halfPanel">
+
+                <span class="button cancel" ng-click="Cancel()">
+                    <button type="button" value="button">
+                        <span>Cancel</span>
+                    </button>
+                </span>
+
+                <span class="button action" ng-click="EditTime()" id="saveButton">
+                    <button type="button" value="Save">
+                        <span class="tick">Save</span>
+                    </button>
+                </span>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+@section scripts{
+    @*<script type="text/javascript" src="/fe/mobile/scripts-ang/service/NavigationService.js"></script>*@
+    <script type="text/javascript" src="/fe/mobile/scripts-ang/service/TimeService.js"></script>
+    <script type="text/javascript" src="/fe/mobile/scripts-ang/controller/TimeController.js"></script>
+}
